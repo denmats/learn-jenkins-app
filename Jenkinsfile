@@ -11,17 +11,17 @@ pipeline {
             }
             steps {
                 sh '''
-                    ls -al
+                    ls -la
                     node --version
                     npm --version
                     npm ci
                     npm run build
-                    ls -al
+                    ls -la
                 '''
             }
         }
 
-        stage('Test') {
+        stage('Test stage') {
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -30,17 +30,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    cd build
-                    test -f index.html
-                '''
-                sh '''
-                    ls -al
-                    node --version
-                    npm --version
-                    npm ci
-                    npm run build
+                    test -f build/index.html
                     npm test
-                    ls -al
                 '''
             }
         }
