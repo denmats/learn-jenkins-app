@@ -61,21 +61,31 @@ pipeline {
             junit 'jest-results/junit.xml'
             junit 'test-results-e2e/junit.xml'
 
-            writeFile file: 'playwright-report/playwright-report-wrapper.html', 
+            writeFile file: 'playwright-report/playwright-report-wrapper.html',
             text: '''<!DOCTYPE html>
+            <html>
+            <head>
+            <meta charset="utf-8">
+            <title>Playwright Report</title>
+            </head>
+            <body>
+            <iframe src="index.html" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups" srcdoc="
+                <!DOCTYPE html>
                 <html>
                 <head>
-                <meta charset="utf-8">
-                <title>Playwright Report</title>
+                <meta charset='utf-8'>
                 <style>
-                    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-                    iframe { border: none; width: 100%; height: 100vh; }
+                    html,body{margin:0;padding:0;height:100%;overflow:hidden}
+                    iframe{border:none;width:100%;height:100vh}
                 </style>
                 </head>
                 <body>
-                <iframe src="index.html" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups"></iframe>
+                <iframe src='index.html' sandbox='allow-scripts allow-same-origin allow-forms allow-modals allow-popups'></iframe>
                 </body>
-                </html>'''
+                </html>
+            "></iframe>
+            </body>
+            </html>'''
 
             publishHTML([allowMissing: false, 
             alwaysLinkToLastBuild: false, 
