@@ -12,7 +12,7 @@ pipeline {
         stage('OCI') {
             agent {
                 docker {
-                    image 'ghcr.io/oracle/oci-cli:latest
+                    image 'ghcr.io/oracle/oci-cli:latest'
                 }
             }
 
