@@ -12,15 +12,30 @@ pipeline {
         stage('OCI') {
             agent {
                 docker {
-                    image 'ghcr.io/oracle/oci-cli:latest'
+                    image 'ghcr.io/oracle/oci-cli:3.88.0'
                     args "--entrypoint=''"
                 }
             }
 
+             // Bind Jenkins Credentials to OCI CLI supported environment variables
+            environment {
+                OCI_CLI_USER        = credentials('oci-user-ocid')
+                OCI_CLI_TENANCY     = credentials('oci-tenancy-ocid')
+                OCI_CLI_FINGERPRINT = credentials('oci-fingerprint')
+                OCI_CLI_REGION      = credentials('oci-region')
+                OCI_CLI_KEY_CONTENT = credentials('oci-private-key')
+
             steps {
                 sh '''
+                    # Verify OCI CLI version
                     oci --version
-                    oci os ns get
+
+                    # 1. Dynamically retrieve the Object Storage Namespace for your tenancy
+                    NAMESPACE=$(oci os ns get --query "data" --raw-output)
+                    echo "Using Namespace: $NAMESPACE"
+
+                    # 2. List the objects inside your bucket
+                    oci os object list --bucket-name learn-jenkins-202606240748 --namespace $NAMESPACE
                 '''
             }
         }
