@@ -13,6 +13,7 @@ pipeline {
             agent {
                 docker {
                     image 'ghcr.io/oracle/oci-cli:latest'
+                    args "--entrypoint=''"
                 }
             }
 
