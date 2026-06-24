@@ -8,6 +8,22 @@ pipeline {
     }
   
     stages {
+
+        stage('OCI') {
+            agent {
+                docker {
+                    image 'ghcr.io/oracle/oci-cli:latest
+                }
+            }
+
+            steps {
+                sh '''
+                    oci --version
+                    oci os ns get
+                '''
+            }
+        }
+
         stage('Build') {
             agent {
                 docker {
