@@ -24,6 +24,7 @@ pipeline {
                 OCI_CLI_FINGERPRINT = credentials('oci-fingerprint')
                 OCI_CLI_REGION      = credentials('oci-region')
                 OCI_CLI_KEY_CONTENT = credentials('oci-private-key')
+            }
 
             steps {
                 sh '''
@@ -170,6 +171,6 @@ pipeline {
                 }
             }
         }
+    
     }
-
 }
