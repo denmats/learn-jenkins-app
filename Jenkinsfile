@@ -39,11 +39,12 @@ pipeline {
                     # 2. List the objects inside your bucket
                     oci os object list --bucket-name learn-jenkins-202606240748 --namespace $NAMESPACE
 
+                    # 3. Create local file
                     echo "Hello in the bucket!" > index.html
-                    export bucket_name=$BUCKET_NAME
-                    oci os object copy --bucket-name $BUCKET_NAME --destination-bucket $BUCKET_NAME --source-object-name index.html --destination-object-name index-${BUILD_NUMBER}.html --namespace $NAMESPACE
-                    echo "Object copied to index-${BUILD_NUMBER}.html in bucket $BUCKET_NAME"
-
+                    
+                    # 4. Upload local file to Object Storage
+                    oci os object put --bucket-name $BUCKET_NAME --name index-${BUILD_NUMBER}.html --file index.html --namespace $NAMESPACE --force
+                    echo "Object uploaded to index-${BUILD_NUMBER}.html in bucket $BUCKET_NAME"
                 '''
             }
         }
