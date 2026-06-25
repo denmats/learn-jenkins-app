@@ -24,6 +24,7 @@ pipeline {
                 OCI_CLI_FINGERPRINT = credentials('oci-fingerprint')
                 OCI_CLI_REGION      = credentials('oci-region')
                 OCI_CLI_KEY_CONTENT = credentials('oci-private-key')
+                BUCKET_NAME = 'learn-jenkins-202606240748'
             }
 
             steps {
@@ -37,6 +38,12 @@ pipeline {
 
                     # 2. List the objects inside your bucket
                     oci os object list --bucket-name learn-jenkins-202606240748 --namespace $NAMESPACE
+
+                    echo "Hello in the bucket!" > index.html
+                    export bucket_name=$BUCKET_NAME
+                    oci os object copy --bucket-name $BUCKET_NAME --destination-bucket $BUCKET_NAME --source-object-name index.html --destination-object-name index-${BUILD_NUMBER}.html --namespace $NAMESPACE
+                    echo "Object copied to index-${BUILD_NUMBER}.html in bucket $BUCKET_NAME"
+
                 '''
             }
         }
